@@ -84,5 +84,11 @@ namespace CRM.Controllers
            await _context.SaveChangesAsync();
            return Ok();
         }
+
+        [HttpGet("GetOrderByClientId")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrderByClientId(int client_id)
+        {
+            return await _context.Orders.Where(x => x.Сustomer == client_id).ToListAsync();
+        }
     }
 }
