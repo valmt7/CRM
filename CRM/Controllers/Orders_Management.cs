@@ -1,94 +1,58 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using CRM;
+using CRM.Services;
+using Microsoft.AspNetCore.Mvc;
+
+
 namespace CRM.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class OrdersController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IOrderService _orderService;
 
-        public OrdersController(AppDbContext context)
+        public OrdersController(IOrderService orderService)
         {
-            _context = context;
+            _orderService = orderService;
         }
 
         [HttpGet("GetOrders")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            return await _context.Orders.ToListAsync();
+            return Ok(await _orderService.GetOrdersAsync());
         }
-        private double GetCost(DeliveryType delivery_type,double value, double distance)
-        {
-            double delivery_cost = 0;
-            switch (delivery_type)
-            {
-                case DeliveryType.Fast:
-                    delivery_cost = 10;
-                    break;
-                case DeliveryType.Express:
-                    delivery_cost = 20;
-                    break;
-                case DeliveryType.Standart:
-                    delivery_cost = 5;
-                    break;
-            }
-            return Math.Round(distance/10*value/10*(delivery_cost/100),2);
-        }
-        [HttpPost("Cancel_Order")]
-        public async Task<ActionResult<Order>> CancelOrder(int order_id)
-        {
-            var orders = await _context.Orders.ToListAsync();
-            var order = await _context.Orders.FindAsync(order_id);
-            if (order != null)
-            {
-                order.Status = "Скасоване";
-            }
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
+
         [HttpPost("Ordermake")]
-        public async Task<ActionResult<Order>> MakeOrder(int customer_id, DeliveryType delivery_type, double value,double distance)
+        public async Task<ActionResult<Order>> MakeOrder(int customerId, DeliveryType deliveryType, double value, double distance)
         {
-
-            var order = new Order
-            {
-                DeliveryCost = GetCost(delivery_type,value,distance),
-                DeliveryType = delivery_type,
-                Status = "в процесі",
-                Distance = distance,
-                Value = value,
-                Сustomer = customer_id
-            };
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
+            var order = await _orderService.MakeOrderAsync(customerId, deliveryType, value, distance);
             return Ok(order);
+        }
 
+        [HttpPost("Cancel_Order")]
+        public async Task<IActionResult> CancelOrder(int orderId)
+        {
+            await _orderService.CancelOrderAsync(orderId);
+            return Ok();
         }
 
         [HttpGet("GetOrderStatus")]
-        public async Task<ActionResult<string>> GetOrderStatus(int order_id)
+        public async Task<ActionResult<string>> GetOrderStatus(int orderId)
         {
-            var order = await _context.Orders.FindAsync(order_id);
-            return order.Status;
-
-        }
-        [HttpDelete("KillDATABASE")]
-        public async Task<ActionResult<Order>> KillData()
-        {
-            foreach (var o in _context.Orders)
-            {
-                _context.Orders.Remove(o);
-            }
-
-           await _context.SaveChangesAsync();
-           return Ok();
+            return Ok(await _orderService.GetOrderStatusAsync(orderId));
         }
 
         [HttpGet("GetOrderByClientId")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrderByClientId(int client_id)
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrderByClientId(int clientId)
         {
-            return await _context.Orders.Where(x => x.Сustomer == client_id).ToListAsync();
+            return Ok(await _orderService.GetOrdersByClientIdAsync(clientId));
+        }
+
+        [HttpDelete("KillDATABASE")]
+        public async Task<IActionResult> KillData()
+        {
+            await _orderService.KillDataAsync();
+            return Ok();
         }
     }
 }

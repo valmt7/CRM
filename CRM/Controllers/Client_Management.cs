@@ -1,39 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CRM;
+using CRM.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CRM;
 namespace CRM.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ClientController : Controller
+    public class ClientController : ControllerBase
     {
-        private readonly AppDbContext _context;
-
-        public ClientController(AppDbContext context)
+        private readonly IClientService _clientService;
+        public ClientController(IClientService clientService)
         {
-            _context = context;
+            _clientService = clientService;
         }
+
         [HttpGet("GetClient")]
-        public async Task<ActionResult<IEnumerable<Client>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            return await _context.Clients.ToListAsync();
+            return Ok(await _clientService.GetClientAsync());
         }
 
         [HttpGet("CreateClient")]
-        public async Task<ActionResult<IEnumerable<Client>>> MakeClient(string name,string phone,string email, string dostup)
-        {
-            var client = new Client
-            {
-                Name = name,
-                Email = email,
-                Dostup = dostup,
-                Phone = phone,
-                Likely = new List<string>( ){"None"}
-            };
-
-            _context.Clients.Add(client);
-            await _context.SaveChangesAsync();
-            return Ok(client);
-        }
+       public async Task<IActionResult> MakeClient(string name, string phone, string email, string dostup)
+       {
+           return Ok(await _clientService.MakeClient(name, phone, email, dostup));
+       }
     }
 }
