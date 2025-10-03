@@ -1,5 +1,6 @@
 ﻿using CRM;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 
 namespace CRM.Services
@@ -18,7 +19,7 @@ namespace CRM.Services
             return await _context.Orders.ToListAsync();
         }
 
-        public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance)
+        public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance, int product_id)
         {
             var order = new Order
             {
@@ -27,9 +28,17 @@ namespace CRM.Services
                 Status = "в процесі",
                 Distance = distance,
                 Value = value,
-                Сustomer = customerId
+                Сustomer = customerId,
+                Product_ID = product_id
             };
             _context.Orders.Add(order);
+            var client = _context.Clients.Find(customerId);
+            var product = await _context.Products.FindAsync(product_id);
+            Console.WriteLine(product.Type);
+            client.Likely.Add(_context.Products.Find(product_id).Type);
+            var list = _context.Products.Where(x => x.Type == product.Type).Take(10).ToList();
+            client.Offers.AddRange(list);
+            Console.WriteLine(client.Offers.Count());
             await _context.SaveChangesAsync();
             return order;
         }

@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRM.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class OrdersController : ControllerBase
+    [Route("api/")]
+    public class OrdersController : Controller
     {
         private readonly IOrderService _orderService;
 
@@ -16,33 +16,33 @@ namespace CRM.Controllers
             _orderService = orderService;
         }
 
-        [HttpGet("GetOrders")]
+        [HttpGet("orders")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
             return Ok(await _orderService.GetOrdersAsync());
         }
 
-        [HttpPost("Ordermake")]
-        public async Task<ActionResult<Order>> MakeOrder(int customerId, DeliveryType deliveryType, double value, double distance)
+        [HttpPost("orders")]
+        public async Task<ActionResult<Order>> MakeOrder(int customerId, DeliveryType deliveryType, double value, double distance,int product_id)
         {
-            var order = await _orderService.MakeOrderAsync(customerId, deliveryType, value, distance);
+            var order = await _orderService.MakeOrderAsync(customerId, deliveryType, value, distance,product_id);
             return Ok(order);
         }
 
-        [HttpPost("Cancel_Order")]
+        [HttpPatch("orders/cancel")]
         public async Task<IActionResult> CancelOrder(int orderId)
         {
             await _orderService.CancelOrderAsync(orderId);
             return Ok();
         }
 
-        [HttpGet("GetOrderStatus")]
+        [HttpGet("orders/status")]
         public async Task<ActionResult<string>> GetOrderStatus(int orderId)
         {
             return Ok(await _orderService.GetOrderStatusAsync(orderId));
         }
 
-        [HttpGet("GetOrderByClientId")]
+        [HttpGet("orders/client")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrderByClientId(int clientId)
         {
             return Ok(await _orderService.GetOrdersByClientIdAsync(clientId));
@@ -54,5 +54,6 @@ namespace CRM.Controllers
             await _orderService.KillDataAsync();
             return Ok();
         }
+        
     }
 }
