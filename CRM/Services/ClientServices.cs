@@ -17,13 +17,13 @@ namespace CRM.Services
         {
             return await _context.Clients.ToListAsync();
         }
-        public async Task<Client> MakeClient(string name, string phone, string email, string dostup)
+        public async Task<Client> MakeClient(string name, string phone, string email, string access)
         {
             var client = new Client
             {
                 Name = name,
                 Email = email,
-                Access = dostup,
+                Access = access,
                 Phone = phone,
                 Likely = new List<string> { },
                 Offers = new List<Products> {}
@@ -34,10 +34,10 @@ namespace CRM.Services
             return client;
         }
 
-        public async Task<Client> SetDostup(int id, string dostup)
+        public async Task<Client> SetClientAccess(int id, string access)
         {
             var client = _context.Clients.Find(id);
-            client.Access = dostup;
+            client.Access = access;
             await _context.SaveChangesAsync();
             return client;
         }

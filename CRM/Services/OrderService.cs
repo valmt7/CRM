@@ -8,7 +8,7 @@ namespace CRM.Services
     public class OrderService : IOrderService
     {
         private readonly AppDbContext _context;
-
+        const int TAKE_PRODUCT_COUNT_FILTER = 10;
         public OrderService(AppDbContext context)
         {
             _context = context;
@@ -31,15 +31,13 @@ namespace CRM.Services
                 Сustomer = customerId,
                 Product_ID = productId
             };
-            int ProductCount = 10;
             _context.Orders.Add(order);
-            var client = _context.Clients.Find(customerId);
+            var client = await  _context.Clients.FindAsync(customerId);
             var product = await _context.Products.FindAsync(productId);
-            Console.WriteLine(product.Type);
-            client.Likely.Add(_context.Products.Find(productId).Type);
-            var list = _context.Products.Where(x => x.Type == product.Type).Take(ProductCount).ToList();
+            var productType = product.Type;
+            client.Likely.Add(productType);
+            var list = _context.Products.Where(x => x.Type == productType).Take(TAKE_PRODUCT_COUNT_FILTER).ToList();
             client.Offers.AddRange(list);
-            Console.WriteLine(client.Offers.Count());
             await _context.SaveChangesAsync();
             return order;
         }

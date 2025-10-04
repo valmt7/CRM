@@ -26,9 +26,9 @@ namespace CRM.Controllers
            return Ok(await _clientService.MakeClient(name, phone, email, dostup));
        }
         [HttpPatch("clients/access")]
-        public async Task<IActionResult> SetAccess(int id, string access)
+        public async Task<IActionResult> SetClientAccess(int id, string access)
         {
-            return Ok(await _clientService.SetDostup(id, access));
+            return Ok(await _clientService.SetClientAccess(id, access));
         }
 
         [HttpGet("clients/offers")]
