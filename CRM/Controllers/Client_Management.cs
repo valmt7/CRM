@@ -37,7 +37,7 @@ namespace CRM.Controllers
             return Ok(await _clientService.GetOffers(clientId));
         }
 
-        [HttpDelete("clients/KillDATABASE")]
+        [HttpDelete("clients/databse")]
         public async Task<IActionResult> KillData()
         {
             await _clientService.KillDataAsync();

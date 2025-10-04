@@ -49,7 +49,7 @@ namespace CRM.Controllers
         }
 
   
-        [HttpDelete("orders/KillDATABASE")]
+        [HttpDelete("orders/databse")]
         public async Task<IActionResult> KillData()
         {
             await _orderService.KillDataAsync();
