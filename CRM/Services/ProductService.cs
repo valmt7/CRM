@@ -30,6 +30,11 @@ namespace CRM.Services
             await _context.SaveChangesAsync();
             return product;
         }
+        public async Task KillDataAsync()
+        {
+            _context.Products.RemoveRange(_context.Products);
+            await _context.SaveChangesAsync();
+        }
 
     }
 }

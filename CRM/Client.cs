@@ -8,6 +8,6 @@
         public string Email { get; set; }
         public List<string> Likely { get; set; } = new List<string>();
         public string Access { get; set; }
-        public List<Products> Offers { get; set; } = new List<Products>();
+        public List<int> Offers { get; set; } = new List<int>();
     }
 }

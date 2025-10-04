@@ -35,15 +35,20 @@ namespace CRM.Services
             var client = await  _context.Clients.FindAsync(customerId);
 
             var product = await _context.Products.FindAsync(productId);
+            string productType = product.Type;
 
-            var productType = product.Type;
-
-            client.Likely.Add(productType);
-
-            var list = _context.Products.Where(x => x.Type == productType).Take(TAKE_PRODUCT_COUNT_FILTER).ToList();
-
-            client.Offers.AddRange(list);
-
+            var likelySet = client.Likely != null ? new HashSet<string>(client.Likely) : new HashSet<string>();
+            var offersSet = client.Offers != null ? new HashSet<int>(client.Offers) : new HashSet<int>();
+            
+            likelySet.Add(productType);
+            var productIds = _context.Products
+                .Where(p => p.Type == productType)
+                .Select(p => p.Id)
+                .ToList();
+            offersSet.UnionWith(productIds);
+            client.Likely = likelySet.ToList();
+            client.Offers = offersSet.ToList();
+            
             await _context.SaveChangesAsync();
 
             return order;
