@@ -48,7 +48,7 @@ namespace CRM.Controllers
             return Ok(await _orderService.GetOrdersByClientIdAsync(clientId));
         }
 
-        [HttpDelete("KillDATABASE")]
+  
         [HttpDelete("KillDATABASE")]
         public async Task<IActionResult> KillData()
         {

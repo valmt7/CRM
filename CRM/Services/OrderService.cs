@@ -33,12 +33,19 @@ namespace CRM.Services
             };
             _context.Orders.Add(order);
             var client = await  _context.Clients.FindAsync(customerId);
+
             var product = await _context.Products.FindAsync(productId);
+
             var productType = product.Type;
+
             client.Likely.Add(productType);
+
             var list = _context.Products.Where(x => x.Type == productType).Take(TAKE_PRODUCT_COUNT_FILTER).ToList();
+
             client.Offers.AddRange(list);
+
             await _context.SaveChangesAsync();
+
             return order;
         }
 
