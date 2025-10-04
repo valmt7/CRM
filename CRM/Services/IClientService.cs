@@ -10,5 +10,7 @@ namespace CRM.Services
        Task<Client> MakeClient(string name, string phone, string email, string access);
        Task<Client> SetClientAccess(int id, string access);
        Task<List<Products>> GetOffers(int client_id);
+       Task KillDataAsync();
+
     }
 }

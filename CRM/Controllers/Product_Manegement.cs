@@ -26,5 +26,12 @@ namespace CRM.Controllers
         {
             return Ok(await _productService.AddProduct(name, price, type));
         }
+
+        [HttpDelete("products/database")]
+        public async Task<IActionResult> KillData()
+        {
+            await _productService.KillDataAsync();
+            return Ok();
+        }
     }
 }

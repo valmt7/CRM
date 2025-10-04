@@ -26,7 +26,7 @@ namespace CRM.Services
                 Access = access,
                 Phone = phone,
                 Likely = new List<string> { },
-                Offers = new List<Products> {}
+                Offers = new List<int>(){ },
             };
 
             _context.Clients.Add(client);
@@ -41,13 +41,24 @@ namespace CRM.Services
             await _context.SaveChangesAsync();
             return client;
         }
+        
 
-        public async Task<List<Products>> GetOffers(int ClientId)
+        public async Task<List<Products>> GetOffers(int clientId)
         {
-            var client = await _context.Clients
-                .Include(c => c.Offers) 
-                .FirstOrDefaultAsync(c => c.Id == ClientId);
-            return client?.Offers ?? new List<Products>();
+            var client = await _context.Clients.FindAsync(clientId);
+            var productList = client.Offers;
+            var result = new List<Products>();
+            for (int i = 0; i < productList.Count; i++)
+            {
+                result.Add(_context.Products.Find(productList[i]));
+            }
+            return result;
+        }
+        public async Task KillDataAsync()
+        {
+            _context.Clients.RemoveRange(_context.Clients);
+            await _context.SaveChangesAsync();
+
         }
 
     }
