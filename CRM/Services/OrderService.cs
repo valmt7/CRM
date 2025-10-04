@@ -19,7 +19,7 @@ namespace CRM.Services
             return await _context.Orders.ToListAsync();
         }
 
-        public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance, int product_id)
+        public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance, int productId)
         {
             var order = new Order
             {
@@ -29,14 +29,15 @@ namespace CRM.Services
                 Distance = distance,
                 Value = value,
                 Сustomer = customerId,
-                Product_ID = product_id
+                Product_ID = productId
             };
+            int ProductCount = 10;
             _context.Orders.Add(order);
             var client = _context.Clients.Find(customerId);
-            var product = await _context.Products.FindAsync(product_id);
+            var product = await _context.Products.FindAsync(productId);
             Console.WriteLine(product.Type);
-            client.Likely.Add(_context.Products.Find(product_id).Type);
-            var list = _context.Products.Where(x => x.Type == product.Type).Take(10).ToList();
+            client.Likely.Add(_context.Products.Find(productId).Type);
+            var list = _context.Products.Where(x => x.Type == product.Type).Take(ProductCount).ToList();
             client.Offers.AddRange(list);
             Console.WriteLine(client.Offers.Count());
             await _context.SaveChangesAsync();

@@ -25,16 +25,16 @@ namespace CRM.Controllers
        {
            return Ok(await _clientService.MakeClient(name, phone, email, dostup));
        }
-        [HttpPut("clients/access")]
-        public async Task<IActionResult> SetDostup(int id, string dostup)
+        [HttpPatch("clients/access")]
+        public async Task<IActionResult> SetAccess(int id, string access)
         {
-            return Ok(await _clientService.SetDostup(id, dostup));
+            return Ok(await _clientService.SetDostup(id, access));
         }
 
         [HttpGet("clients/offers")]
-        public async Task<IActionResult> Getoffers(int client_id)
+        public async Task<IActionResult> GetOffers(int clientId)
         {
-            return Ok(await _clientService.GetOffers(client_id));
+            return Ok(await _clientService.GetOffers(clientId));
         }
     }
 }

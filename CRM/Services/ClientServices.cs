@@ -42,11 +42,11 @@ namespace CRM.Services
             return client;
         }
 
-        public async Task<List<Products>> GetOffers(int client_id)
+        public async Task<List<Products>> GetOffers(int ClientId)
         {
             var client = await _context.Clients
                 .Include(c => c.Offers) 
-                .FirstOrDefaultAsync(c => c.Id == client_id);
+                .FirstOrDefaultAsync(c => c.Id == ClientId);
             return client?.Offers ?? new List<Products>();
         }
 
