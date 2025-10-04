@@ -1,5 +1,6 @@
 ﻿using CRM;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 
 namespace CRM.Services
@@ -7,7 +8,7 @@ namespace CRM.Services
     public class OrderService : IOrderService
     {
         private readonly AppDbContext _context;
-
+        const int TAKE_PRODUCT_COUNT_FILTER = 10;
         public OrderService(AppDbContext context)
         {
             _context = context;
@@ -18,7 +19,7 @@ namespace CRM.Services
             return await _context.Orders.ToListAsync();
         }
 
-        public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance)
+        public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance, int productId)
         {
             var order = new Order
             {
@@ -27,10 +28,24 @@ namespace CRM.Services
                 Status = "в процесі",
                 Distance = distance,
                 Value = value,
-                Сustomer = customerId
+                Сustomer = customerId,
+                Product_ID = productId
             };
             _context.Orders.Add(order);
+            var client = await  _context.Clients.FindAsync(customerId);
+
+            var product = await _context.Products.FindAsync(productId);
+
+            var productType = product.Type;
+
+            client.Likely.Add(productType);
+
+            var list = _context.Products.Where(x => x.Type == productType).Take(TAKE_PRODUCT_COUNT_FILTER).ToList();
+
+            client.Offers.AddRange(list);
+
             await _context.SaveChangesAsync();
+
             return order;
         }
 

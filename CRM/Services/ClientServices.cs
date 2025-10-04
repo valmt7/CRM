@@ -1,6 +1,8 @@
 ﻿using CRM;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+
 namespace CRM.Services
 {
     public class ClientServices : IClientService
@@ -15,20 +17,38 @@ namespace CRM.Services
         {
             return await _context.Clients.ToListAsync();
         }
-        public async Task<Client> MakeClient(string name, string phone, string email, string dostup)
+        public async Task<Client> MakeClient(string name, string phone, string email, string access)
         {
             var client = new Client
             {
                 Name = name,
                 Email = email,
-                Dostup = dostup,
+                Access = access,
                 Phone = phone,
-                Likely = new List<string>() { "None" }
+                Likely = new List<string> { },
+                Offers = new List<Products> {}
             };
 
             _context.Clients.Add(client);
             await _context.SaveChangesAsync();
             return client;
         }
+
+        public async Task<Client> SetClientAccess(int id, string access)
+        {
+            var client = _context.Clients.Find(id);
+            client.Access = access;
+            await _context.SaveChangesAsync();
+            return client;
+        }
+
+        public async Task<List<Products>> GetOffers(int ClientId)
+        {
+            var client = await _context.Clients
+                .Include(c => c.Offers) 
+                .FirstOrDefaultAsync(c => c.Id == ClientId);
+            return client?.Offers ?? new List<Products>();
+        }
+
     }
 }
