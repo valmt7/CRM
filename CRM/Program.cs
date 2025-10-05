@@ -11,8 +11,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IClientService, ClientServices>();
+builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IFleetService, FleetService>();
+builder.Services.AddScoped<IRouteService, RouteService>();
 
 var app = builder.Build();
 

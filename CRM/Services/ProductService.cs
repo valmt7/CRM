@@ -1,7 +1,7 @@
-﻿using CRM;
-using Microsoft.AspNetCore.Mvc;
+﻿
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
+
 
 namespace CRM.Services
 {

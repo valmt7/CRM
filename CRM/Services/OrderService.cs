@@ -1,6 +1,6 @@
-﻿using CRM;
+﻿
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
+
 
 
 namespace CRM.Services
@@ -47,7 +47,7 @@ namespace CRM.Services
             likelySet.Add(productType);
             var productIds = _context.Products
                 .Where(p => p.Type == productType)
-                .Select(p => p.Id)
+                .Select(p => p.Id).Take(TAKE_PRODUCT_COUNT_FILTER)
                 .ToList();
             offersSet.UnionWith(productIds);
             client.Likely = likelySet.ToList();
@@ -86,8 +86,7 @@ namespace CRM.Services
             _context.Orders.RemoveRange(_context.Orders);
             await _context.SaveChangesAsync();
         }
-
-        // Вспомогательный метод для расчёта стоимости доставки
+        
         private double GetCost(DeliveryType deliveryType, double value, double distance)
         {
             double deliveryCost = deliveryType switch

@@ -1,15 +1,13 @@
-﻿using CRM;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
+﻿using Microsoft.EntityFrameworkCore;
+
 
 namespace CRM.Services
 {
-    public class ClientServices : IClientService
+    public class ClientService : IClientService
     {
         private readonly AppDbContext _context;
 
-        public ClientServices(AppDbContext context)
+        public ClientService(AppDbContext context)
         {
             _context = context;
         }
