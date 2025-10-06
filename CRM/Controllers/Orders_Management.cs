@@ -1,4 +1,4 @@
-﻿using CRM;
+﻿using CRM.MidMiddleware;
 using CRM.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRM.Controllers
 {
     [ApiController]
-    [Route("api/")]
+    [Route("api/orders")]
     public class OrdersController : Controller
     {
         private readonly IOrderService _orderService;
@@ -16,39 +16,46 @@ namespace CRM.Controllers
             _orderService = orderService;
         }
 
-        [HttpGet("orders")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            return Ok(await _orderService.GetOrdersAsync());
+            var orders = await _orderService.GetOrdersAsync();
+            return Ok(orders);
         }
 
-        [HttpPost("orders")]
+        [HttpPost]
         public async Task<ActionResult<Order>> MakeOrder(int customerId, DeliveryType deliveryType, double value, double distance,int productId)
         {
             var order = await _orderService.MakeOrderAsync(customerId, deliveryType, value, distance,productId);
             return Ok(order);
         }
 
-        [HttpPatch("orders/cancel")]
+        [HttpPatch("cancel")]
         public async Task<IActionResult> CancelOrder(int orderId)
         {
-            await _orderService.CancelOrderAsync(orderId);
-            return Ok();
+            var order = await _orderService.CancelOrderAsync(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return Ok(order);
         }
 
-        [HttpGet("orders/status")]
+        [HttpGet("status")]
         public async Task<ActionResult<string>> GetOrderStatus(int orderId)
         {
-            return Ok(await _orderService.GetOrderStatusAsync(orderId));
+            var status = await _orderService.GetOrderStatusAsync(orderId);
+            return Ok(status);
         }
 
-        [HttpGet("orders/client")]
+        [HttpGet("client")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrderByClientId(int clientId)
         {
-            return Ok(await _orderService.GetOrdersByClientIdAsync(clientId));
+            var order = await _orderService.GetOrdersByClientIdAsync(clientId);
+            return Ok(order);
         }
         
-        [HttpDelete("orders/database")]
+        [HttpDelete("database")]
 
         public async Task<IActionResult> KillData()
         {

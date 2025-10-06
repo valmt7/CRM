@@ -1,6 +1,4 @@
-using CRM;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
 
 namespace CRM.Services
 {
@@ -8,7 +6,7 @@ namespace CRM.Services
     {
         Task<IEnumerable<Order>> GetOrdersAsync();
         Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance,int productId);
-        Task CancelOrderAsync(int orderId);
+        Task<Order> CancelOrderAsync(int orderId);
         Task<string> GetOrderStatusAsync(int orderId);
         Task<IEnumerable<Order>> GetOrdersByClientIdAsync(int clientId);
         Task KillDataAsync();

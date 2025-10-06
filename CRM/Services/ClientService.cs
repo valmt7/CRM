@@ -1,21 +1,25 @@
-﻿using CRM;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
+﻿using Microsoft.EntityFrameworkCore;
+using CRM.MidMiddleware;
 
 namespace CRM.Services
 {
-    public class ClientServices : IClientService
+    public class ClientService : IClientService
     {
         private readonly AppDbContext _context;
 
-        public ClientServices(AppDbContext context)
+        public ClientService(AppDbContext context)
         {
             _context = context;
         }
         public async Task<IEnumerable<Client>> GetClientAsync()
         {
-            return await _context.Clients.ToListAsync();
+            var clients = await _context.Clients.ToListAsync();
+            if (clients.Count == 0)
+            {
+                throw new NotFoundClientsExeption();
+            }
+            return clients;
+          
         }
         public async Task<Client> MakeClient(string name, string phone, string email, string access)
         {
@@ -37,8 +41,11 @@ namespace CRM.Services
         public async Task<Client> SetClientAccess(int id, string access)
         {
             var client = _context.Clients.Find(id);
-            client.Access = access;
-            await _context.SaveChangesAsync();
+            if (client != null)
+            {
+                client.Access = access;
+                await _context.SaveChangesAsync();
+            }
             return client;
         }
         
@@ -46,6 +53,10 @@ namespace CRM.Services
         public async Task<List<Products>> GetOffers(int clientId)
         {
             var client = await _context.Clients.FindAsync(clientId);
+            if (client == null)
+            {
+                return null;
+            }
             var productList = client.Offers;
             var result = new List<Products>();
             for (int i = 0; i < productList.Count; i++)

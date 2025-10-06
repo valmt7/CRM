@@ -1,7 +1,7 @@
-﻿using CRM;
-using Microsoft.AspNetCore.Mvc;
+﻿
+using CRM.MidMiddleware;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
+
 
 namespace CRM.Services
 {
@@ -16,7 +16,12 @@ namespace CRM.Services
 
         public async Task<IEnumerable<Products>> GetProductsAsync()
         {
-            return await _context.Products.ToListAsync();
+            var products = await _context.Products.ToListAsync();
+            if (products.Count == 0)
+            {
+                throw new NotFoundPrductsExeption();
+            }
+            return products;
         }
         public async Task<Products> AddProduct(string name, double price, string type)
         {

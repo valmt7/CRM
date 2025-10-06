@@ -1,6 +1,6 @@
-﻿using CRM;
+﻿using CRM.MidMiddleware;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
+
 
 
 namespace CRM.Services
@@ -16,7 +16,15 @@ namespace CRM.Services
 
         public async Task<IEnumerable<Order>> GetOrdersAsync()
         {
-            return await _context.Orders.ToListAsync();
+            var orders = await _context.Orders.ToListAsync();
+            if (orders.Count == 0)
+            {
+                throw new NotFoundOrdersException();
+            }
+
+            return orders;
+
+
         }
 
         public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance, int productId)
@@ -47,7 +55,7 @@ namespace CRM.Services
             likelySet.Add(productType);
             var productIds = _context.Products
                 .Where(p => p.Type == productType)
-                .Select(p => p.Id)
+                .Select(p => p.Id).Take(TAKE_PRODUCT_COUNT_FILTER)
                 .ToList();
             offersSet.UnionWith(productIds);
             client.Likely = likelySet.ToList();
@@ -58,7 +66,7 @@ namespace CRM.Services
             return order;
         }
 
-        public async Task CancelOrderAsync(int orderId)
+        public async Task<Order> CancelOrderAsync(int orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
             if (order != null)
@@ -66,19 +74,28 @@ namespace CRM.Services
                 order.Status = "Скасоване";
                 await _context.SaveChangesAsync();
             }
+            return order;
         }
 
         public async Task<string> GetOrderStatusAsync(int orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
-            return order?.Status;
+            if (order != null)
+            {
+                return order.Status;
+            }
+            throw new NotFoundOrderByIdException(orderId); 
         }
-
         public async Task<IEnumerable<Order>> GetOrdersByClientIdAsync(int clientId)
         {
-            return await _context.Orders
-                                 .Where(x => x.Сustomer == clientId)
-                                 .ToListAsync();
+            var order = await _context.Orders
+                .Where(x => x.Сustomer == clientId)
+                .ToListAsync();
+            if (order == null)
+            {
+                return null;
+            }
+            return order;
         }
 
         public async Task KillDataAsync()
@@ -86,8 +103,7 @@ namespace CRM.Services
             _context.Orders.RemoveRange(_context.Orders);
             await _context.SaveChangesAsync();
         }
-
-        // Вспомогательный метод для расчёта стоимости доставки
+        
         private double GetCost(DeliveryType deliveryType, double value, double distance)
         {
             double deliveryCost = deliveryType switch

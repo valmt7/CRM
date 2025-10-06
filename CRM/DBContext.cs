@@ -9,6 +9,9 @@ namespace CRM
         public DbSet<Order> Orders { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Products> Products { get; set; }
+        public DbSet<Fleet> Fleets { get; set; }
+        public DbSet<Route> Routes { get; set; }
+        
     }
 
 }

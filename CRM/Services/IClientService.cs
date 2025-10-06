@@ -1,6 +1,3 @@
-using CRM;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace CRM.Services
 {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CRM.Controllers
 {
     [ApiController]
-    [Route("api/")]
+    [Route("api/clients")]
     public class ClientController : ControllerBase
     {
         private readonly IClientService _clientService;
@@ -14,30 +14,41 @@ namespace CRM.Controllers
             _clientService = clientService;
         }
 
-        [HttpGet("clients")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Order>>> GetClient()
         {
-            return Ok(await _clientService.GetClientAsync());
+            var clients = await _clientService.GetClientAsync();
+            return Ok(clients);
         }
 
-        [HttpPost("clients")]
+        [HttpPost]
        public async Task<IActionResult> MakeClient(string name, string phone, string email, string dostup)
        {
            return Ok(await _clientService.MakeClient(name, phone, email, dostup));
        }
-        [HttpPatch("clients/access")]
+        [HttpPatch("access")]
         public async Task<IActionResult> SetClientAccess(int id, string access)
         {
-            return Ok(await _clientService.SetClientAccess(id, access));
+            var client = await _clientService.SetClientAccess(id, access);
+            if (client == null)
+            {
+                return NotFound();
+            }
+            return Ok(client);
         }
 
-        [HttpGet("clients/offers")]
+        [HttpGet("offers")]
         public async Task<IActionResult> GetOffers(int clientId)
         {
-            return Ok(await _clientService.GetOffers(clientId));
+            var client = await _clientService.GetOffers(clientId);
+            if (client == null)
+            {
+                return NotFound();
+            }
+            return Ok(client);
         }
         
-        [HttpDelete("clients/database")]
+        [HttpDelete("database")]
         public async Task<IActionResult> KillData()
         {
             await _clientService.KillDataAsync();
