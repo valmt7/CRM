@@ -16,7 +16,12 @@ namespace CRM.Services
 
         public async Task<IEnumerable<Products>> GetProductsAsync()
         {
-            return await _context.Products.ToListAsync();
+            var products = await _context.Products.ToListAsync();
+            if (products.Count == 0)
+            {
+                return null;
+            }
+            return products;
         }
         public async Task<Products> AddProduct(string name, double price, string type)
         {

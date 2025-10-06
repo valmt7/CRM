@@ -16,7 +16,12 @@ namespace CRM.Services
 
         public async Task<IEnumerable<Order>> GetOrdersAsync()
         {
-            return await _context.Orders.ToListAsync();
+            var orders = await _context.Orders.ToListAsync();
+            if (orders.Count == 0)
+            {
+                return null;
+            }
+            return orders; ;
         }
 
         public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance, int productId)
@@ -58,27 +63,40 @@ namespace CRM.Services
             return order;
         }
 
-        public async Task CancelOrderAsync(int orderId)
+        public async Task<Order> CancelOrderAsync(int orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
-            if (order != null)
+            if (order == null)
             {
-                order.Status = "Скасоване";
-                await _context.SaveChangesAsync();
+                return null;
             }
+            order.Status = "Скасоване";
+            await _context.SaveChangesAsync();
+            return order;
+
+           
         }
 
         public async Task<string> GetOrderStatusAsync(int orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
+            if (order == null)
+            {
+                return null;
+            }
             return order?.Status;
         }
 
         public async Task<IEnumerable<Order>> GetOrdersByClientIdAsync(int clientId)
         {
-            return await _context.Orders
-                                 .Where(x => x.Сustomer == clientId)
-                                 .ToListAsync();
+            var order = await _context.Orders
+                .Where(x => x.Сustomer == clientId)
+                .ToListAsync();
+            if (order == null)
+            {
+                return null;
+            }
+            return order;
         }
 
         public async Task KillDataAsync()

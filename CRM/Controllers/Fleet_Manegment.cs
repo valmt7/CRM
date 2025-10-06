@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CRM.Controllers
 {
     [ApiController]
-    [Route("api/")]
+    [Route("api/fleets")]
     public class FleetController : Controller
     {
         private readonly IFleetService _fleetService;
@@ -16,46 +16,78 @@ namespace CRM.Controllers
             _fleetService = fleetService;
         }
 
-        [HttpGet("fleets")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Fleet>>> GetFleets()
         {
-            return Ok(await _fleetService.GetFleetAsync());
+            var fleet = await _fleetService.GetFleetAsync();
+            if (fleet == null)
+            {
+                return NotFound();
+            }
+            return Ok(fleet);
+            
         }
 
-        [HttpPost("fleets")]
+        [HttpPost]
         public async Task<ActionResult<Fleet>> CreateFleet(string name, string location)
         {
-            return Ok(await _fleetService.CreateFleet(name, location));
+            var fleet = await _fleetService.CreateFleet(name, location);
+            return Ok(fleet);
         }
 
-        [HttpPatch("fleet/service")]
+        [HttpPatch("service")]
         public async Task<ActionResult<Fleet>> UpdateFleetService(int id, int state)
         {
-            return Ok(await _fleetService.UpdateFleetState(id,state));
+            var fleet = await _fleetService.UpdateFleetState(id, state);
+            if (fleet == null)
+            {
+                return NotFound();
+            }
+            return Ok(fleet);
         }
 
-        [HttpGet("fleet/order")]
+        [HttpGet("order")]
         public async Task<ActionResult<Fleet>> SetFleetOrder(int id, int order)
         {
-            return Ok(await _fleetService.SetFleetOrder(id, order));
+            var fleet = await _fleetService.SetFleetOrder(id, order);
+            if (fleet == null)
+            {
+                return NotFound();
+            }
+            return Ok(fleet);
         }
 
-        [HttpGet("fleet/location")]
+        [HttpGet("location")]
         public async Task<ActionResult<string>> SetFleetLocation(int id)
         {
-            return (await _fleetService.GetFleetlocation(id));
+            var fleet = await _fleetService.GetFleetlocation(id);
+            if (fleet == null)
+            {
+                return NotFound();
+            }
+            return Ok(fleet);
         }
 
-        [HttpPatch("fleet/location")]
+        [HttpPatch("location")]
         public async Task<ActionResult<Fleet>> UpdateFleetLocation(int id, string location)
         {
-            return Ok(await _fleetService.UpdateFleetLocation(id, location));
+            var fleet = await _fleetService.UpdateFleetLocation(id, location);
+            if (fleet == null)
+            {
+                return NotFound();
+            }
+            return Ok();
         }
 
-        [HttpGet("fleet/route")]
+        [HttpGet("route")]
         public async Task<ActionResult<string>> SetFleetRoute(int id, int route)
         {
-            return Ok(await _fleetService.SetFleetRoute(id, route));
+            var fleet = await _fleetService.SetFleetRoute(id, route);
+            if (fleet == null)
+            {
+                return NotFound();
+            }
+            return Ok(fleet);
         }
     }
 }

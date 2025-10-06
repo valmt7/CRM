@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRM.Controllers
 {
     [ApiController]
-    [Route("api/")]
+    [Route("api/products")]
 
     public class ProductController : Controller
     {
@@ -16,18 +16,24 @@ namespace CRM.Controllers
         }
 
 
-        [HttpGet("products")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Products>>> GetProducts()
         {
-            return Ok(await _productService.GetProductsAsync());
+            var product = await _productService.GetProductsAsync();
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+           
         }
-        [HttpPost("products")]
+        [HttpPost]
         public async Task<IActionResult> AddProduct(string name, double price, string type)
         {
             return Ok(await _productService.AddProduct(name, price, type));
         }
 
-        [HttpDelete("products/database")]
+        [HttpDelete("database")]
         public async Task<IActionResult> KillData()
         {
             await _productService.KillDataAsync();

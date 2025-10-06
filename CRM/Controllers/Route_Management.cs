@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.Controllers;
 [ApiController]
-[Route("api/")]
+[Route("api/routes")]
 
 public class RouteController : Controller
 {
@@ -14,10 +14,15 @@ public class RouteController : Controller
         _routeService = routeService;
     }
 
-    [HttpGet("routes")]
+    [HttpGet]
     public async Task<ActionResult<IEnumerable<Fleet>>> GetFleets()
     {
-        return Ok(await _routeService.GetRouteAsync());
+        var fleet = await _routeService.GetRouteAsync();
+        if (fleet == null)
+        {
+            return NotFound();
+        }
+        return Ok(fleet);
     }
     
 }
