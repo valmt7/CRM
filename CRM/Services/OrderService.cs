@@ -66,12 +66,12 @@ namespace CRM.Services
         public async Task<Order> CancelOrderAsync(int orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
-            if (order == null)
+            if (order != null)
             {
-                return null;
+                order.Status = "Скасоване";
+                await _context.SaveChangesAsync();
             }
-            order.Status = "Скасоване";
-            await _context.SaveChangesAsync();
+            
             return order;
 
            
@@ -80,11 +80,12 @@ namespace CRM.Services
         public async Task<string> GetOrderStatusAsync(int orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
-            if (order == null)
+            if (order != null)
             {
-                return null;
+                return order?.Status;
             }
-            return order?.Status;
+            return null;
+           
         }
 
         public async Task<IEnumerable<Order>> GetOrdersByClientIdAsync(int clientId)

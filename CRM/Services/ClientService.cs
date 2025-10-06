@@ -41,12 +41,11 @@ namespace CRM.Services
         public async Task<Client> SetClientAccess(int id, string access)
         {
             var client = _context.Clients.Find(id);
-            if (client == null)
+            if (client != null)
             {
-                return null;
+                client.Access = access;
+                await _context.SaveChangesAsync();
             }
-            client.Access = access;
-            await _context.SaveChangesAsync();
             return client;
         }
         
@@ -54,7 +53,7 @@ namespace CRM.Services
         public async Task<List<Products>> GetOffers(int clientId)
         {
             var client = await _context.Clients.FindAsync(clientId);
-            if (client == null)
+            if (client != null)
             {
                 return null;
             }

@@ -49,12 +49,12 @@ public class FleetService : IFleetService
     {
          
         var fleet = await _context.Fleets.FindAsync(id);
-        if (fleet == null)
+        if (fleet != null)
         {
-            return null;
+            fleet.State = state;
+            await _context.SaveChangesAsync();
         }
-        fleet.State = state;
-        await _context.SaveChangesAsync();
+       
         return fleet;
     }
 
