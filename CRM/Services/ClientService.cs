@@ -14,10 +14,6 @@ namespace CRM.Services
         public async Task<IEnumerable<Client>> GetClientAsync()
         {
             var clients = await _context.Clients.ToListAsync();
-            if (clients.Count == 0)
-            {
-                return null;
-            }
             return clients;
           
         }

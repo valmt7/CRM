@@ -13,10 +13,6 @@ public class RouteService : IRouteService
         public async Task<IEnumerable<Route>> GetRouteAsync()
         {
             var routes = await _context.Routes.ToListAsync();
-            if (routes.Count == 0)
-            {
-                return null;
-            }
             return routes; ;
         }
         

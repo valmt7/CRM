@@ -1,4 +1,4 @@
-﻿
+﻿using CRM.MidMiddleware;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -17,10 +17,6 @@ namespace CRM.Services
         public async Task<IEnumerable<Order>> GetOrdersAsync()
         {
             var orders = await _context.Orders.ToListAsync();
-            if (orders.Count == 0)
-            {
-                return null;
-            }
             return orders; ;
         }
 
@@ -71,23 +67,19 @@ namespace CRM.Services
                 order.Status = "Скасоване";
                 await _context.SaveChangesAsync();
             }
-            
             return order;
-
-           
         }
 
         public async Task<string> GetOrderStatusAsync(int orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
+
             if (order != null)
             {
-                return order?.Status;
+                return order.Status;
             }
-            return null;
-           
+            throw new NotFoundOrderException(orderId); 
         }
-
         public async Task<IEnumerable<Order>> GetOrdersByClientIdAsync(int clientId)
         {
             var order = await _context.Orders

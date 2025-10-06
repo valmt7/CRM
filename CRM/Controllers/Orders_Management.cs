@@ -1,4 +1,4 @@
-﻿using CRM;
+﻿using CRM.MidMiddleware;
 using CRM.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,22 +48,14 @@ namespace CRM.Controllers
         [HttpGet("status")]
         public async Task<ActionResult<string>> GetOrderStatus(int orderId)
         {
-            var order = await _orderService.GetOrderStatusAsync(orderId);
-            if (order == null)
-            {
-                return NotFound();
-            }
-            return Ok(order);
+            var status = await _orderService.GetOrderStatusAsync(orderId);
+            return Ok(status);
         }
 
         [HttpGet("client")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrderByClientId(int clientId)
         {
             var order = await _orderService.GetOrdersByClientIdAsync(clientId);
-            if (order == null)
-            {
-                return NotFound();
-            }
             return Ok(order);
         }
         
