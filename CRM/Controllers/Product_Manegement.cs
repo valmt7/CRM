@@ -20,10 +20,6 @@ namespace CRM.Controllers
         public async Task<ActionResult<IEnumerable<Products>>> GetProducts()
         {
             var product = await _productService.GetProductsAsync();
-            if (product == null)
-            {
-                return NotFound();
-            }
             return Ok(product);
            
         }

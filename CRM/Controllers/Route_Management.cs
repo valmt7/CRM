@@ -18,10 +18,6 @@ public class RouteController : Controller
     public async Task<ActionResult<IEnumerable<Fleet>>> GetFleets()
     {
         var fleet = await _routeService.GetRouteAsync();
-        if (fleet == null)
-        {
-            return NotFound();
-        }
         return Ok(fleet);
     }
     

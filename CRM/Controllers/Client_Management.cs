@@ -18,10 +18,6 @@ namespace CRM.Controllers
         public async Task<ActionResult<IEnumerable<Order>>> GetClient()
         {
             var clients = await _clientService.GetClientAsync();
-            if (clients == null)
-            {
-                return NotFound();
-            }
             return Ok(clients);
         }
 

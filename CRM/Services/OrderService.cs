@@ -17,7 +17,14 @@ namespace CRM.Services
         public async Task<IEnumerable<Order>> GetOrdersAsync()
         {
             var orders = await _context.Orders.ToListAsync();
-            return orders; ;
+            if (orders.Count == 0)
+            {
+                throw new NotFoundOrdersException();
+            }
+
+            return orders;
+
+
         }
 
         public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance, int productId)
@@ -73,12 +80,11 @@ namespace CRM.Services
         public async Task<string> GetOrderStatusAsync(int orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
-
             if (order != null)
             {
                 return order.Status;
             }
-            throw new NotFoundOrderException(orderId); 
+            throw new NotFoundOrderByIdException(orderId); 
         }
         public async Task<IEnumerable<Order>> GetOrdersByClientIdAsync(int clientId)
         {

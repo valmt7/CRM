@@ -20,10 +20,6 @@ namespace CRM.Controllers
         public async Task<ActionResult<IEnumerable<Fleet>>> GetFleets()
         {
             var fleet = await _fleetService.GetFleetAsync();
-            if (fleet == null)
-            {
-                return NotFound();
-            }
             return Ok(fleet);
             
         }

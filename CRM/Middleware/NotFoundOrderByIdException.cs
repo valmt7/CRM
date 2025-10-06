@@ -1,8 +1,8 @@
 namespace CRM.MidMiddleware
 {
-    public class NotFoundOrderException : Exception
+    public class NotFoundOrderByIdException : Exception
     {
-        public NotFoundOrderException(int orderId)
+        public NotFoundOrderByIdException(int orderId)
             : base($"Order with id {orderId} not found.")
         {
             OrderId = orderId;

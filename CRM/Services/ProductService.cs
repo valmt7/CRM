@@ -1,5 +1,5 @@
 ﻿
-
+using CRM.MidMiddleware;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -19,7 +19,7 @@ namespace CRM.Services
             var products = await _context.Products.ToListAsync();
             if (products.Count == 0)
             {
-                return null;
+                throw new NotFoundPrductsExeption();
             }
             return products;
         }

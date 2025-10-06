@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using CRM.MidMiddleware;
 
 namespace CRM.Services
 {
@@ -14,6 +14,10 @@ namespace CRM.Services
         public async Task<IEnumerable<Client>> GetClientAsync()
         {
             var clients = await _context.Clients.ToListAsync();
+            if (clients.Count == 0)
+            {
+                throw new NotFoundClientsExeption();
+            }
             return clients;
           
         }

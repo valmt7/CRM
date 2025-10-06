@@ -1,4 +1,4 @@
-using CRM;
+using CRM.MidMiddleware;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +22,7 @@ public class FleetService : IFleetService
         var fleets = await _context.Fleets.ToListAsync();
         if (fleets.Count == 0)
         {
-            return null;
+            throw new NotFoundFleetsExeption();
         }
         return fleets;
     }

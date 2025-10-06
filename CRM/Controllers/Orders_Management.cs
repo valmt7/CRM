@@ -20,10 +20,6 @@ namespace CRM.Controllers
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
             var orders = await _orderService.GetOrdersAsync();
-            if (orders == null)
-            {
-                return NotFound();
-            }
             return Ok(orders);
         }
 

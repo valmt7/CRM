@@ -28,13 +28,42 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
         };
         switch (exception)
         {
-            case NotFoundOrderException notFoundOrder:
+            case NotFoundOrderByIdException notFoundOrderByID:
                 problemDetails.Status = StatusCodes.Status404NotFound;
                 problemDetails.Title = "Order not found";
-                problemDetails.Detail = notFoundOrder.Message;
+                problemDetails.Detail = notFoundOrderByID.Message;
                 httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
                 break;
-
+            case NotFoundOrdersException notFoundOrders:
+                problemDetails.Status = StatusCodes.Status404NotFound;
+                problemDetails.Title = "Order not found";
+                problemDetails.Detail = notFoundOrders.Message;
+                httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                break;
+            case NotFoundClientsExeption notFoundClients:
+                problemDetails.Status = StatusCodes.Status404NotFound;
+                problemDetails.Title = "Client not found";
+                problemDetails.Detail = notFoundClients.Message;
+                httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                break;
+            case NotFoundFleetsExeption notFoundFleets:
+                problemDetails.Status = StatusCodes.Status404NotFound;
+                problemDetails.Title = "Fleet not found";
+                problemDetails.Detail = notFoundFleets.Message;
+                httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                break;
+            case NotFoundPrductsExeption notFoundPrducts:
+                problemDetails.Status = StatusCodes.Status404NotFound;
+                problemDetails.Title = "Prducts not found";
+                problemDetails.Detail = notFoundPrducts.Message;
+                httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                break;
+            case NotFoundRoutesExeption notFoundRoutes:
+                problemDetails.Status = StatusCodes.Status404NotFound;
+                problemDetails.Title = "Routes not found";
+                problemDetails.Detail = notFoundRoutes.Message;
+                httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                break;
             default:
                 problemDetails.Status = StatusCodes.Status500InternalServerError;
                 problemDetails.Title = "Server error";

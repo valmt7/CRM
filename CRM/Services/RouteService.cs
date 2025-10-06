@@ -1,3 +1,4 @@
+using CRM.MidMiddleware;
 using Microsoft.EntityFrameworkCore;
 namespace CRM.Services;
 
@@ -13,7 +14,11 @@ public class RouteService : IRouteService
         public async Task<IEnumerable<Route>> GetRouteAsync()
         {
             var routes = await _context.Routes.ToListAsync();
-            return routes; ;
+            if (routes.Count == 0)
+            {
+                throw new NotFoundRoutesExeption();
+            }
+            return routes; 
         }
         
         
