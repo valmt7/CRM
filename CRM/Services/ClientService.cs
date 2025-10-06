@@ -53,7 +53,7 @@ namespace CRM.Services
         public async Task<List<Products>> GetOffers(int clientId)
         {
             var client = await _context.Clients.FindAsync(clientId);
-            if (client != null)
+            if (client == null)
             {
                 return null;
             }
