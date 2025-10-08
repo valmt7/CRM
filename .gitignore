@@ -5,6 +5,7 @@
 #папка
 Migrations/
 .idea/
+.env
 # User-specific files
 *.rsuser
 *.suo

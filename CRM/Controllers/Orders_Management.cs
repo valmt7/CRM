@@ -54,6 +54,12 @@ namespace CRM.Controllers
             var order = await _orderService.GetOrdersByClientIdAsync(clientId);
             return Ok(order);
         }
+
+        [HttpPatch("newstatus")]
+        public async Task<ActionResult<Order>> SetOrderStatus(int orderId,string status)
+        {
+            return Ok(await _orderService.SetOrderStatus(orderId,status));
+        }
         
         [HttpDelete("database")]
 
