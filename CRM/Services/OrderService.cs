@@ -43,7 +43,7 @@ namespace CRM.Services
                 Distance = distance,
                 Value = value,
                 Сustomer = customerId,
-                Product_ID = productId
+                ProductID = productId
             };
             _context.Orders.Add(order);
             var client = await  _context.Clients.FindAsync(customerId);
@@ -137,9 +137,10 @@ namespace CRM.Services
                 );
                 
             }
+         
             return order;
         }
-
+        
 
         private double GetCost(DeliveryType deliveryType, double value, double distance)
         {
