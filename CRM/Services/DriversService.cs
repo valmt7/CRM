@@ -83,6 +83,7 @@ public class DriversService : IDriversService
         }
         driver.FleetId = fleetId;
         await _context.SaveChangesAsync();
+        Console.WriteLine(driver.Email);
         if (!string.IsNullOrEmpty(driver.Email))
         {
             await _emailSender.SendMail(

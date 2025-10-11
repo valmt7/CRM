@@ -24,7 +24,7 @@ namespace CRM.Controllers
         public async Task<ActionResult<Driver>> CreateDriver(string name, string lastName, string phoneNumber,
             string email)
         {
-            return Ok(await _driversService.CreateDriver(name, lastName, phoneNumber, email));
+            return Ok(await _driversService.CreateDriver(name, lastName, email, phoneNumber));
         }
         [HttpPatch("order")]
 
