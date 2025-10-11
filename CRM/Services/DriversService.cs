@@ -110,8 +110,8 @@ public class DriversService : IDriversService
             {
 
                 await _emailSender.SendMail(managerEmail,
-                    $"Critical situations #{driverId}, type: {situationType}, orderId{orderId}\n",
-                    $"Critical situation details: {situationDetails}\n");
+                    $"Critical situations #{driverId}, type: {situationType}, orderId{orderId}",
+                    $"Critical situation details: {situationDetails}");
             }
         }
         return "Success";
