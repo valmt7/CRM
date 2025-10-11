@@ -43,7 +43,7 @@ namespace CRM.Controllers
         public async Task<ActionResult<string>> SendCriticalSituations(int driverId, int orderId, string situationType,
             string situationDetails)
         {
-            return Ok(_driversService.SendCriticalSituations(driverId, orderId, situationType, situationDetails));
+            return Ok(await _driversService.SendCriticalSituations(driverId, orderId, situationType, situationDetails));
         }
     }
 }
