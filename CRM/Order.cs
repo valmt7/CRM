@@ -31,6 +31,9 @@ namespace CRM
         public double Value { get; set; }
 
         public int ProductID { get; set; }
+        
+        public string StartPoint { get; set; }
+        public string EndPoint { get; set; }
 
     }
 }

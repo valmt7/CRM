@@ -19,6 +19,7 @@ builder.Services.AddScoped<IFleetService, FleetService>();
 builder.Services.AddScoped<IRouteService, RouteService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IDriversService, DriversService>();
+builder.Services.AddScoped<IManagerService, ManagerService>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 var app = builder.Build();

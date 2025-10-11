@@ -33,8 +33,13 @@ namespace CRM.Services
 
         }
 
-        public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance, int productId)
+        public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance, int productId, string endPoint)
         {
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                throw new NotFoundPrductsExeption();
+            }
             var order = new Order
             {
                 DeliveryCost = GetCost(deliveryType, value, distance),
@@ -43,12 +48,12 @@ namespace CRM.Services
                 Distance = distance,
                 Value = value,
                 Сustomer = customerId,
-                ProductID = productId
+                ProductID = productId,
+                StartPoint = product.WarehouseLocation,
+                EndPoint = endPoint
             };
             _context.Orders.Add(order);
             var client = await  _context.Clients.FindAsync(customerId);
-
-            var product = await _context.Products.FindAsync(productId);
             
             var productType = product.Type;
 

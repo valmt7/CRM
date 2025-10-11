@@ -24,9 +24,9 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Order>> MakeOrder(int customerId, DeliveryType deliveryType, double value, double distance,int productId)
+        public async Task<ActionResult<Order>> MakeOrder(int customerId, DeliveryType deliveryType, double value, double distance,int productId,string endPoint)
         {
-            var order = await _orderService.MakeOrderAsync(customerId, deliveryType, value, distance,productId);
+            var order = await _orderService.MakeOrderAsync(customerId, deliveryType, value, distance,productId,endPoint);
             return Ok(order);
         }
 

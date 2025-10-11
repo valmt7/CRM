@@ -70,6 +70,12 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
                 problemDetails.Detail = notFoundDrivers.Message;
                 httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
                 break;
+            case NotFoundManagersExeption notFoundManagers:
+                problemDetails.Status = StatusCodes.Status404NotFound;
+                problemDetails.Title = "Managers not found";
+                problemDetails.Detail = notFoundManagers.Message;
+                httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                break;
             default:
                 problemDetails.Status = StatusCodes.Status500InternalServerError;
                 problemDetails.Title = "Server error";
