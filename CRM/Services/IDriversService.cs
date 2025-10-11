@@ -9,4 +9,6 @@ public interface IDriversService
 
     Task<string> SendCriticalSituations(int driverId, int orderId, string situationType,
         string situationDetails);
+
+    Task<Driver> SetDriverRoute(int driverId, int routeId);
 }

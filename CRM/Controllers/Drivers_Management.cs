@@ -45,5 +45,11 @@ namespace CRM.Controllers
         {
             return Ok(await _driversService.SendCriticalSituations(driverId, orderId, situationType, situationDetails));
         }
+
+        [HttpPatch("route")]
+        public async Task<ActionResult<Driver>> SetRouteDriver(int driverId, int routeId)
+        {
+            return Ok(await _driversService.SetDriverRoute(driverId, routeId));
+        }
     }
 }

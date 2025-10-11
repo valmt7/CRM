@@ -116,4 +116,15 @@ public class DriversService : IDriversService
         }
         return "Success";
     }
+    public async Task<Driver> SetDriverRoute(int driverId, int routeId)
+    {
+        var driver = await _context.Drivers.FindAsync(driverId);
+        if (driver == null)
+        {
+            throw new NotFoundDriversExeption();
+        }
+        driver.RouteId = routeId;
+        await _context.SaveChangesAsync();
+        return driver;
+    }
 }
