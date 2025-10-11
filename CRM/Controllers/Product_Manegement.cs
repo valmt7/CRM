@@ -24,9 +24,9 @@ namespace CRM.Controllers
            
         }
         [HttpPost]
-        public async Task<IActionResult> AddProduct(string name, double price, string type)
+        public async Task<IActionResult> AddProduct(string name, double price, string type,string warehouseLocation)
         {
-            return Ok(await _productService.AddProduct(name, price, type));
+            return Ok(await _productService.AddProduct(name, price, type,warehouseLocation));
         }
 
         [HttpDelete("database")]
