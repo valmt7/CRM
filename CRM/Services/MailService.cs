@@ -7,17 +7,24 @@ namespace CRM.Services
 {
     public class MailService : IMailService
     {
+        private readonly string smtpHost;
+        private readonly string mail;
+        private readonly string password;
+        private readonly int port;
+        public MailService(IConfiguration config)
+        {
+            smtpHost = config["MAIL_SMTP"];
+            mail = config["MAIL_LOGIN"];
+            password = config["MAIL_PASSWORD"];
+            port = Convert.ToInt32(config["MAIL_PORT"]);
+        }
+        
         public async Task SendMail(string userEmail, string subject, string body)
         {
-            Env.Load();
-
-            string mail = Env.GetString("MAIL_LOGIN");
-            string password = Env.GetString("MAIL_PASSWORD");
-            string smtpHost = Env.GetString("MAIL_SMTP");
-
+            
             using var smtpClient = new SmtpClient(smtpHost)
             {
-                Port = 587, 
+                Port = port, 
                 Credentials = new NetworkCredential(mail, password),
                 EnableSsl = true
             };

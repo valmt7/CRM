@@ -30,10 +30,6 @@ namespace CRM.Controllers
         public async Task<IActionResult> SetClientAccess(int id, string access)
         {
             var client = await _clientService.SetClientAccess(id, access);
-            if (client == null)
-            {
-                return NotFound();
-            }
             return Ok(client);
         }
 
@@ -41,10 +37,6 @@ namespace CRM.Controllers
         public async Task<IActionResult> GetOffers(int clientId)
         {
             var client = await _clientService.GetOffers(clientId);
-            if (client == null)
-            {
-                return NotFound();
-            }
             return Ok(client);
         }
         

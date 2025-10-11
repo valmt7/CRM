@@ -54,6 +54,10 @@ namespace CRM.Services
             };
             _context.Orders.Add(order);
             var client = await  _context.Clients.FindAsync(customerId);
+            if (client == null)
+            {
+                throw new NotFoundClientsExeption();
+            }
             
             var productType = product.Type;
 

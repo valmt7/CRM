@@ -22,6 +22,8 @@ builder.Services.AddScoped<IDriversService, DriversService>();
 builder.Services.AddScoped<IManagerService, ManagerService>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+DotNetEnv.Env.Load();
+builder.Configuration.AddEnvironmentVariables();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

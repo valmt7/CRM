@@ -9,10 +9,15 @@ public class RouteService : IRouteService
 {
 
     private readonly AppDbContext _context;
+    private readonly string apiKeyDirection;
+    private readonly string apiKeyGeocoding;
   
-    public RouteService(AppDbContext context)
+    public RouteService(AppDbContext context,IConfiguration config)
     {
         _context = context;
+        apiKeyDirection = config["GOOGLE_MAPS_DIRECTION_API_KEY"];
+        apiKeyGeocoding = config["GOOGLE_MAPS_GEOCODE_API_KEY"];
+
     }
 
     public async Task<IEnumerable<Route>> GetRouteAsync()
@@ -29,9 +34,6 @@ public class RouteService : IRouteService
 
     public async Task<Route> CreateRouteAsync(string startLocation, string endLocation)
     {
-        Env.Load(); 
-        string apiKeyDirection = Env.GetString("GOOGLE_MAPS_DIRECTION_API_KEY");
-        string apiKeyGeocoding= Env.GetString("GOOGLE_MAPS_GEOCODE_API_KEY");
     string url = $"https://maps.googleapis.com/maps/api/directions/json?" +
                  $"origin={Uri.EscapeDataString(startLocation)}&" +
                  $"destination={Uri.EscapeDataString(endLocation)}&" +
