@@ -23,13 +23,14 @@ namespace CRM.Services
             }
             return products;
         }
-        public async Task<Products> AddProduct(string name, double price, string type)
+        public async Task<Products> AddProduct(string name, double price, string type, string warehouseLocation)
         {
             var product = new Products
             {
                 Name = name,
                 Price = price,
-                Type = type
+                Type = type,
+                WarehouseLocation = warehouseLocation
             };
             _context.Products.Add(product);
             await _context.SaveChangesAsync();

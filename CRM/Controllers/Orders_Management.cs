@@ -24,10 +24,10 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Order>> MakeOrder(int customerId, DeliveryType deliveryType, double value, double distance,int productId)
+        public async Task<ActionResult<Order>> MakeOrder(int customerId, DeliveryType deliveryType, double value, double distance,int productId,string endPoint)
         {
-            var order = await _orderService.MakeOrderAsync(customerId, deliveryType, value, distance,productId);
-            return Ok(order);
+            var order = await _orderService.MakeOrderAsync(customerId, deliveryType, value, distance,productId,endPoint);
+            return Created(Url.Link("orders", new {orderId = order.Id}), order);
         }
 
         [HttpPatch("cancel")]
@@ -54,6 +54,13 @@ namespace CRM.Controllers
             var order = await _orderService.GetOrdersByClientIdAsync(clientId);
             return Ok(order);
         }
+
+        [HttpPatch("newstatus")]
+        public async Task<ActionResult<Order>> SetOrderStatus(int orderId,string status)
+        {
+            return Ok(await _orderService.SetOrderStatus(orderId,status));
+        }
+        
         
         [HttpDelete("database")]
 

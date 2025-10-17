@@ -30,7 +30,10 @@ namespace CRM
         public double Distance { get; set;}
         public double Value { get; set; }
 
-        public int Product_ID { get; set; }
+        public int ProductID { get; set; }
+        
+        public string StartPoint { get; set; }
+        public string EndPoint { get; set; }
 
     }
 }

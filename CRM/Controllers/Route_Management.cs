@@ -15,10 +15,18 @@ public class RouteController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Fleet>>> GetFleets()
+    public async Task<ActionResult<IEnumerable<Route>>> GetFleets()
     {
-        var fleet = await _routeService.GetRouteAsync();
-        return Ok(fleet);
+        var route = await _routeService.GetRouteAsync();
+        return Ok(route);
     }
+
+    [HttpPost]
+    public async Task<ActionResult<Route>> CreateRouteAsync(string startLocation, string endLocation)
+    {
+        var route = await _routeService.CreateRouteAsync(startLocation, endLocation);
+        return Created(Url.Link("routes", new { routeId = route.Id }), route);
+    }
+    
     
 }

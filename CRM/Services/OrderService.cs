@@ -1,5 +1,7 @@
 ﻿using CRM.MidMiddleware;
 using Microsoft.EntityFrameworkCore;
+using CRM.Services;
+
 
 
 
@@ -8,11 +10,15 @@ namespace CRM.Services
     public class OrderService : IOrderService
     {
         private readonly AppDbContext _context;
+        private readonly IMailService _emailSender;
+        
         const int TAKE_PRODUCT_COUNT_FILTER = 10;
-        public OrderService(AppDbContext context)
+        public OrderService(AppDbContext context, IMailService mailService)
         {
             _context = context;
+            _emailSender = mailService;
         }
+
 
         public async Task<IEnumerable<Order>> GetOrdersAsync()
         {
@@ -27,8 +33,13 @@ namespace CRM.Services
 
         }
 
-        public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance, int productId)
+        public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance, int productId, string endPoint)
         {
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                throw new NotFoundPrductsExeption();
+            }
             var order = new Order
             {
                 DeliveryCost = GetCost(deliveryType, value, distance),
@@ -37,12 +48,16 @@ namespace CRM.Services
                 Distance = distance,
                 Value = value,
                 Сustomer = customerId,
-                Product_ID = productId
+                ProductID = productId,
+                StartPoint = product.WarehouseLocation,
+                EndPoint = endPoint
             };
             _context.Orders.Add(order);
             var client = await  _context.Clients.FindAsync(customerId);
-
-            var product = await _context.Products.FindAsync(productId);
+            if (client == null)
+            {
+                throw new NotFoundClientsExeption();
+            }
             
             var productType = product.Type;
 
@@ -60,9 +75,20 @@ namespace CRM.Services
             offersSet.UnionWith(productIds);
             client.Likely = likelySet.ToList();
             client.Offers = offersSet.ToList();
-            
+            product = await _context.Products.FindAsync(productId);
             await _context.SaveChangesAsync();
-
+            Console.WriteLine(client.Email);
+            if (!string.IsNullOrEmpty(client.Email))
+            {
+                await _emailSender.SendMail(
+                    client.Email,
+                    $"New order #{order.Id}",
+                    "✅ Your order has been successfully placed!\n" +
+                    "Order details:\n" +
+                    $"{product.Name}\n" +
+                    $"Price: {product.Price}$\n"
+                );
+            }
             return order;
         }
 
@@ -103,7 +129,28 @@ namespace CRM.Services
             _context.Orders.RemoveRange(_context.Orders);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Order> SetOrderStatus(int orderId, string status)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            var client = await _context.Clients.FindAsync(order.Сustomer);
+            order.Status = status;
+            await _context.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(client.Email))
+            {
+                await _emailSender.SendMail(
+                    client.Email,
+                    $"Order status update #{order.Id}",
+                    "✅ Your order status has been changed!\n" +
+                    $"New order status: {order.Status}\n"
+                );
+                
+            }
+         
+            return order;
+        }
         
+
         private double GetCost(DeliveryType deliveryType, double value, double distance)
         {
             double deliveryCost = deliveryType switch
