@@ -24,7 +24,8 @@ public class RouteController : Controller
     [HttpPost]
     public async Task<ActionResult<Route>> CreateRouteAsync(string startLocation, string endLocation)
     {
-        return Ok(await _routeService.CreateRouteAsync(startLocation, endLocation));
+        var route = await _routeService.CreateRouteAsync(startLocation, endLocation);
+        return Created(Url.Link("routes", new { routeId = route.Id }), route);
     }
     
     

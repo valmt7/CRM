@@ -28,7 +28,7 @@ namespace CRM.Controllers
         public async Task<ActionResult<Fleet>> CreateFleet(string name, string location)
         {
             var fleet = await _fleetService.CreateFleet(name, location);
-            return Ok(fleet);
+            return Created(Url.Link("fleets", new {fleetId = fleet.Id}), fleet);
         }
 
         [HttpPatch("service")]

@@ -24,7 +24,8 @@ namespace CRM.Controllers
         public async Task<ActionResult<Manager>> AddManager(string managerName, string managerEmail, string managerLastName,
             string managerPhone)
         {
-            return Ok(await _managerService.AddManager(managerName, managerEmail, managerLastName, managerPhone));
+            var manager = await _managerService.AddManager(managerName, managerEmail, managerLastName, managerPhone);
+            return Created(Url.Link("managers",new {managerId = manager.Id}), manager);
         }
 
     }

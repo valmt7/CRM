@@ -27,7 +27,7 @@ namespace CRM.Controllers
         public async Task<ActionResult<Order>> MakeOrder(int customerId, DeliveryType deliveryType, double value, double distance,int productId,string endPoint)
         {
             var order = await _orderService.MakeOrderAsync(customerId, deliveryType, value, distance,productId,endPoint);
-            return Ok(order);
+            return Created(Url.Link("orders", new {orderId = order.Id}), order);
         }
 
         [HttpPatch("cancel")]
