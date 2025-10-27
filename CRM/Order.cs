@@ -7,13 +7,8 @@ namespace CRM
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum DeliveryType
     {
-        [EnumMember(Value = "Fast")]
         Fast,
-
-        [EnumMember(Value = "Standart")]
         Standart,
-
-        [EnumMember(Value = "Express")]
         Express,
     }
     public class Order

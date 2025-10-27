@@ -1,5 +1,11 @@
 namespace CRM;
-
+public enum ReportPeriod
+{
+    day,
+    week,
+    month,
+    year
+}
 public class Report
 {
     public int Id { get; set; }

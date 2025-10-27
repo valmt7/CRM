@@ -11,12 +11,13 @@ public class RouteService : IRouteService
     private readonly AppDbContext _context;
     private readonly string apiKeyDirection;
     private readonly string apiKeyGeocoding;
-  
+    private const string API_DIR = "GOOGLE_MAPS_DIRECTION_API_KEY";
+    private const string API_GEO = "GOOGLE_MAPS_GEOCODE_API_KEY";
     public RouteService(AppDbContext context,IConfiguration config)
     {
         _context = context;
-        apiKeyDirection = config["GOOGLE_MAPS_DIRECTION_API_KEY"];
-        apiKeyGeocoding = config["GOOGLE_MAPS_GEOCODE_API_KEY"];
+        apiKeyDirection = config[API_DIR];
+        apiKeyGeocoding = config[API_GEO];
 
     }
 

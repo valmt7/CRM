@@ -11,6 +11,5 @@ namespace CRM.Services
         Task<IEnumerable<Order>> GetOrdersByClientIdAsync(int clientId);
         Task<Order> SetOrderStatus(int orderId,string status);
         Task KillDataAsync();
-        Task<Order> SuccessOrder(int orderId);
     }
 }

@@ -7,6 +7,8 @@ public class ReportService : IReportService
 {
     private readonly AppDbContext _context;
 
+   
+
     public ReportService(AppDbContext context)
     {
         _context = context;
@@ -32,22 +34,22 @@ public class ReportService : IReportService
         return report;
     }
 
-    public async Task<double> GetAverageDeliveryTime(int clientId,string filter,DateTime now)
+    public async Task<double> GetAverageDeliveryTime(int clientId,ReportPeriod filter,DateTime now)
     {
         DateTime DateTimeFilter;
         
         switch (filter)
         {
-            case "day":
+            case ReportPeriod.day: 
                 DateTimeFilter = now.AddDays(-1); 
                 break;
-            case "week":
+            case ReportPeriod.week:
                 DateTimeFilter = now.AddDays(-7);
                 break;
-            case "month":
+            case ReportPeriod.month:
                 DateTimeFilter = now.AddMonths(-1);
                 break;
-            case "year":
+            case ReportPeriod.year:
                 DateTimeFilter = now.AddYears(-1);
                 break;
             default:

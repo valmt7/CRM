@@ -23,8 +23,8 @@ namespace CRM.Controllers
             return Ok(reports);
         }
 
-        [HttpGet("avgtime")]
-        public async Task<IActionResult> GetAverageDeliveryTime(int clientId, string filter)
+        [HttpGet("time/average")]
+        public async Task<IActionResult> GetAverageDeliveryTime(int clientId, ReportPeriod filter)
         {
             DateTime now = DateTime.Now;
             return Ok(await _reportService.GetAverageDeliveryTime(clientId, filter, now));
