@@ -76,6 +76,12 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
                 problemDetails.Detail = notFoundManagers.Message;
                 httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
                 break;
+            case NotFoundReportsExeption notFoundReports:
+                problemDetails.Status = StatusCodes.Status404NotFound;
+                problemDetails.Title = "Report not found";
+                problemDetails.Detail = notFoundReports.Message;
+                httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                break;
             default:
                 problemDetails.Status = StatusCodes.Status500InternalServerError;
                 problemDetails.Title = "Server error";

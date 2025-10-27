@@ -59,6 +59,7 @@ public class DriversService : IDriversService
         driver.OrderId = orderId;
         await _context.SaveChangesAsync();
         var product = await _context.Products.FindAsync(order.ProductID);
+        Console.WriteLine(driver.Email);
         if (!string.IsNullOrEmpty(driver.Email))
         {
             await _emailSender.SendMail(

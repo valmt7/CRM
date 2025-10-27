@@ -20,13 +20,13 @@ builder.Services.AddScoped<IRouteService, RouteService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IDriversService, DriversService>();
 builder.Services.AddScoped<IManagerService, ManagerService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 DotNetEnv.Env.Load();
 builder.Configuration.AddEnvironmentVariables();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -13,6 +13,7 @@ namespace CRM
         public DbSet<Route> Routes { get; set; }
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Manager> Managers { get; set; }
+        public DbSet<Report> Reports { get; set; }
         
         
     }

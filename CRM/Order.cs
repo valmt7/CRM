@@ -7,13 +7,13 @@ namespace CRM
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum DeliveryType
     {
-        [EnumMember(Value = "Швидко")]
+        [EnumMember(Value = "Fast")]
         Fast,
 
-        [EnumMember(Value = "Стандарт")]
+        [EnumMember(Value = "Standart")]
         Standart,
 
-        [EnumMember(Value = "Експрес")]
+        [EnumMember(Value = "Express")]
         Express,
     }
     public class Order
@@ -35,5 +35,9 @@ namespace CRM
         public string StartPoint { get; set; }
         public string EndPoint { get; set; }
 
+        public DateTime StartTime { get; set; }
+        
+        public DateTime EndTime { get; set; }
+        
     }
 }

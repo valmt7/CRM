@@ -69,6 +69,12 @@ namespace CRM.Controllers
             await _orderService.KillDataAsync();
             return Ok();
         }
+
+        [HttpPatch("successorder")]
+        public async Task<IActionResult> SuccessOrder(int orderId)
+        {
+            return Ok(await _orderService.SuccessOrder(orderId));
+        }
         
     }
 }
