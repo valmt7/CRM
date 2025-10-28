@@ -23,12 +23,11 @@ public class AdminService : IAdminService
             order.Status = "Success";  
             order.EndTime = endTime;
             TimeSpan timeSpan = endTime - order.StartTime;
-            var drivers = await _context.Drivers.Where(x=>x.OrderId == orderId).ToListAsync();
-            if (drivers.Count==0)
+            var driver = await _context.Drivers.Where(x => x.OrderId == orderId).FirstAsync();
+            if (driver == null)
             {
                 throw new NotFoundDriversExeption();
             }
-            var driver = drivers[0];
             var fleet = await _context.Fleets.FindAsync(driver.FleetId);
             if (fleet == null)
             {
@@ -55,8 +54,8 @@ public class AdminService : IAdminService
                 CreateDate = endTime,
                 ClientId = order.Сustomer,
             };
-            driver.OrderId = -1;
-            driver.RouteId = -1;
+            driver.OrderId = 0;
+            driver.RouteId = 0;
            
             if (!string.IsNullOrEmpty(client.Email))
             {
