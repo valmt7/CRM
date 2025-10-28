@@ -22,9 +22,9 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-       public async Task<IActionResult> MakeClient(string name, string phone, string email, string dostup)
+       public async Task<IActionResult> MakeClient(string name, string phone, string email, string access)
        {
-           var client = await _clientService.MakeClient(name, phone, email, dostup);
+           var client = await _clientService.MakeClient(name, phone, email, access);
            return Created(Url.Link("clients", new {clientId = client.Id}), client);
            
        }

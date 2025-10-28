@@ -34,10 +34,6 @@ namespace CRM.Controllers
         public async Task<IActionResult> CancelOrder(int orderId)
         {
             var order = await _orderService.CancelOrderAsync(orderId);
-            if (order == null)
-            {
-                return NotFound();
-            }
             return Ok(order);
         }
 

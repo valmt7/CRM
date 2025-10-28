@@ -36,13 +36,15 @@ namespace CRM.Services
         public async Task<Order> MakeOrderAsync(int customerId, DeliveryType deliveryType, double value, double distance, int productId, string endPoint)
         {
             var product = await _context.Products.FindAsync(productId);
+            var deliveryCost = GetCost(deliveryType, value, distance);
+            var orderPrice = product.Price - deliveryCost;
             if (product == null)
             {
                 throw new NotFoundPrductsExeption();
             }
             var order = new Order
             {
-                DeliveryCost = GetCost(deliveryType, value, distance),
+                DeliveryCost = deliveryCost,
                 DeliveryType = deliveryType,
                 Status = "в процесі",
                 Distance = distance,
@@ -50,7 +52,8 @@ namespace CRM.Services
                 Сustomer = customerId,
                 ProductID = productId,
                 StartPoint = product.WarehouseLocation,
-                EndPoint = endPoint
+                EndPoint = endPoint,
+                StartTime = DateTime.Now,
             };
             _context.Orders.Add(order);
             var client = await  _context.Clients.FindAsync(customerId);
@@ -95,11 +98,12 @@ namespace CRM.Services
         public async Task<Order> CancelOrderAsync(int orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
-            if (order != null)
+            if (order == null)
             {
-                order.Status = "Скасоване";
-                await _context.SaveChangesAsync();
+                throw new NotFoundOrderByIdException(orderId);
             }
+            order.Status = "Скасоване";
+            await _context.SaveChangesAsync();
             return order;
         }
 
@@ -135,7 +139,6 @@ namespace CRM.Services
             var order = await _context.Orders.FindAsync(orderId);
             var client = await _context.Clients.FindAsync(order.Сustomer);
             order.Status = status;
-            await _context.SaveChangesAsync();
             if (!string.IsNullOrEmpty(client.Email))
             {
                 await _emailSender.SendMail(
@@ -146,7 +149,7 @@ namespace CRM.Services
                 );
                 
             }
-         
+            await _context.SaveChangesAsync();
             return order;
         }
         
@@ -162,5 +165,7 @@ namespace CRM.Services
             };
             return Math.Round(distance / 10 * value / 10 * (deliveryCost / 100), 2);
         }
+
+       
     }
 }
